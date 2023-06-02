@@ -1,7 +1,7 @@
 # ENGR-103
 
-#Author
+# Author
 Tyler Henderson
 
-#What does it do?
+# What does it do?
 You get to play blackjack
