@@ -12,8 +12,8 @@ In order to help players properly use aces there will be an option to choose whe
 In order to reset the game, the board will need to be shook and there will be a board output which will confirm the reset.
 
 # Specifications
-Input Controls:/n
-•	Hit: right button/n
+Input Controls:
+•	Hit: right button
 •	Stand: left button
 •	Switch: do not disturb mode where the sound will be disabled but the light features will still work
 •	Shake: resets game
