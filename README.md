@@ -23,25 +23,42 @@ Input Controls:
 Outputs:
 
 •	LEDs indicate how many the user has:
+
 o	with a half-lit LED showing 1, and 
+
 o	fully lit LED indicating 2
 
 •	Special light pattern to display exactly 21
+
 •	Special sound pattern to represent getting 21
+
 •	Special pattern to represent busts(going over 21)
+
 •	Extra sound pattern to represent user drawing an ace(21 with first two cards dealt)
 Speech Feedback
-•	Either play a melody or voice for if user draws an ace
+
 •	Either play a melody or a voice when user wins or loses
+
 Controls:
+
 •	Left Button
+
 •	Right Button
+
 •	Switch
+
 Sensors Used:
+
 •	Motion Detector
+
 Functions and Ranges:
+
 •	CircuitPlayground.setPixelColor();
+
 o	Set different color and brightness depending on situation
+
 Thresholds and map()’s:
+
 •	Threshold for acceleration around 80-90
+
 •	No mapping, the outputs will be based solely on outcomes of the game
