@@ -2,9 +2,9 @@
 
 float X, Y, Z, totalAccel, accelThreshold = 65;
 int dealerArray[52] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
-int userArray[52] = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+int userArray[52] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
 int userCount = 0, dealerCount = 0, dealerHand = 0, rightButton = 5, leftButton = 4, switchPin = 7, gameMode = 0, drawnCard = 0, finalUserCount = 0, finalDealerCount = 0, dealerDisplay = 0;
-bool standFlag = false, hitFlag = false, switchFlag = false, startFlag = false, dealerFlag = false;
+bool standFlag = false, hitFlag = false, switchFlag = false, startFlag = false, dealerFlag = false, doNotDisturb = false;
 
 void setup() {
   CircuitPlayground.begin();
@@ -20,8 +20,7 @@ void setup() {
 void loop() {
   startGame();
   checkReset();
-  // checkEnd();
-  // dealerView();
+  checkEnd();
 }
 
 void startGame() {
@@ -106,32 +105,6 @@ void checkEnd() {
   checkReset();
 }
 
-void dealerView() {
-  if(switchFlag) {
-    dealerDisplay = dealerCount;
-    if(dealerCount < 10) {
-     for(int i = 0; i < dealerCount; i++) {
-      CircuitPlayground.setPixelColor(i, 0, 0, 125);
-     }
-    }
-    else if(dealerCount >= 10) {
-      dealerDisplay = map(dealerCount, 10, 21, 0, 10);
-      for(int i = 0; i < dealerDisplay; i++) {
-      CircuitPlayground.setPixelColor(i, 0, 0, 255);
-      }
-    }
-  }
-}
-
-void cardCheck() { //check if ace was drawn, then prompt user to choose between 11 and 1 for the values
-  if(drawnCard = 11) {
-    CircuitPlayground.playTone(250, 250);
-    CircuitPlayground.playTone(200, 250);
-    CircuitPlayground.playTone(150, 250);
-    aceSequence();
-  }
-}
-
 void initialize() {
   Serial.println("Resetting");
   userCount = 0;
@@ -144,18 +117,14 @@ void initialize() {
   finalDealerCount = 0;
   dealerDisplay = 0;
   dealerFlag = false;
+  doNotDisturb = false;
   delay(2000);
   CircuitPlayground.clearPixels();
   Serial.println("Reset Complete");
   delay(1000);
   startFlag = false;
+  Serial.println("Check");
   // startGame();
-}
-
-
-void aceSequence() {
-  //CircuitPlayground.setPixelColor();
-  checkReset();
 }
 
 void bustSequence() { //also used for losing
@@ -171,23 +140,28 @@ void bustSequence() { //also used for losing
   }
   delay(10000);
   Serial.println("You Lose :(");
-  CircuitPlayground.playTone(300,500); 
-  CircuitPlayground.playTone(250,500); 
-  CircuitPlayground.playTone(200,1300);
-  delay(10000);
+  if(doNotDisturb){
+    CircuitPlayground.playTone(300,500); 
+    CircuitPlayground.playTone(250,500); 
+    CircuitPlayground.playTone(200,1300);
+    delay(100);
+  }
+  delay(1000);
   initialize();
 }
 
 void winSequence() {
   for(int i = 0; i < 10; i++){
    CircuitPlayground.setPixelColor(i, 0, 255, 0);
-   delay(50000);
+   delay(40000);
   }
   delay(10000);
-  CircuitPlayground.playTone(200,500);
-  CircuitPlayground.playTone(300,1000);
-  Serial.println("You Win!");
-  delay(1000);
+  if(doNotDisturb) {
+    CircuitPlayground.playTone(200,500);
+    CircuitPlayground.playTone(300,1000);
+    Serial.println("You Win!");
+    delay(1000);
+  }
   initialize();
 }
 
@@ -197,17 +171,12 @@ void pushSequence() {
     CircuitPlayground.setPixelColor(i, 125, 125, 125);
     delay(40000);
   }
-  
-  delay(50000);
+  delay(5000);
   initialize();
 }
 
 void switchFunction() {
-  delay(30);
-  Serial.println(switchFlag);
-  Serial.println("Switching Views");
-  CircuitPlayground.clearPixels();
-  switchFlag = !switchFlag;
+  doNotDisturb = !doNotDisturb;
 }
 
 void hitFunction() {
